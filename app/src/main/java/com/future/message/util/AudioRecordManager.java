@@ -4,6 +4,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
@@ -18,7 +19,8 @@ import java.io.IOException;
  * Date: 2021/2/3 20:41
  * Description: 录音管理类
  */
-public class AudioRecordManager {
+public enum  AudioRecordManager {
+    SINGLETON;
     // 采样率
     private final int mSampleRateInHz = 44100;
     // 声道
@@ -29,22 +31,18 @@ public class AudioRecordManager {
     private final int mAudioSource = MediaRecorder.AudioSource.MIC;
 
     private AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener;
-    private String mRecordFilePath;
     private File mRecordingFile;
     // 录音缓存大小
     private int mRecordBufSize;
     private AudioRecord mAudioRecord;
 
 
-    public void init(String filePath, AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener){
-        mRecordFilePath = filePath;
-        this.onAudioFocusChangeListener = onAudioFocusChangeListener;
+    public void init(){
         mRecordBufSize = AudioRecord.getMinBufferSize(mSampleRateInHz,mChannelConfig,mAudioFormat);
         mAudioRecord = new AudioRecord(mAudioSource,mSampleRateInHz,mChannelConfig,mAudioFormat,mRecordBufSize);
-        mRecordingFile = new File(mRecordFilePath);
-        // 删除存在过的该文件
-        if (mRecordingFile.exists()){
-            mRecordingFile.delete();
+        mRecordingFile = new File(FilePathUtil.getRecordLocalPath());
+        if (!mRecordingFile.exists()){
+            mRecordingFile.getParentFile().mkdirs();
         }
         try {
             mRecordingFile.createNewFile();
@@ -54,6 +52,7 @@ public class AudioRecordManager {
     }
 
     public void startRecording(){
+        Log.e("Record","startRecording");
         if (mAudioRecord == null || mAudioRecord.getState() == AudioRecord.STATE_UNINITIALIZED){
             return;
         }
@@ -70,11 +69,26 @@ public class AudioRecordManager {
                             dos.write(buffer[i]);
                         }
                     }
+                    dos.close();
+                    Log.e("Record","dos");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
             }
         }).start();
+    }
+
+    public void stopRecording(){
+        Log.e("Record","stopRecording");
+        if (mAudioRecord == null){
+            return;
+        }
+        if (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING){
+            mAudioRecord.stop();
+        }
+        if (mAudioRecord.getState() == AudioRecord.STATE_INITIALIZED){
+            mAudioRecord.release();
+        }
     }
 }

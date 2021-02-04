@@ -1,6 +1,8 @@
 package com.future.message;
 
 import android.Manifest;
+import android.media.AudioManager;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -8,22 +10,49 @@ import android.widget.Button;
 
 import com.future.message.base.BaseActivity;
 import com.future.message.constant.Constant;
+import com.future.message.util.App;
+import com.future.message.util.AudioRecordManager;
+import com.future.message.util.MediaRecorderManager;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class MainActivity extends BaseActivity {
 
-    private Button mBtnRecord;
+    private Button mBtnMediaRecorder;
+    private Button mBtnAudioRecord;
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (!hasPermission(Constant.RECORD_AUDIO_PERMISSION)){
-                requestPermission(Constant.RECORD_AUDIO_CODE,Constant.RECORD_AUDIO_PERMISSION);
+            if (!hasPermission(Constant.RECORD_AUDIO_PERMISSION)) {
+                requestPermission(Constant.RECORD_AUDIO_CODE, Constant.RECORD_AUDIO_PERMISSION);
                 return false;
             }
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
+            switch (v.getId()) {
+                case R.id.btn_media_recorder:
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            AudioRecordManager.SINGLETON.init();
+                            AudioRecordManager.SINGLETON.startRecording();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            AudioRecordManager.SINGLETON.stopRecording();
+                            break;
+                    }
                     break;
-                case MotionEvent.ACTION_UP:
+                case R.id.btn_audio_record:
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            MediaRecorderManager.SINGLETON.startRecord();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            MediaRecorderManager.SINGLETON.stopRecord();
+                            break;
+                    }
                     break;
             }
             return false;
@@ -40,11 +69,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView() {
-        mBtnRecord = findViewById(R.id.btn_record);
+        mBtnMediaRecorder = findViewById(R.id.btn_media_recorder);
+        mBtnAudioRecord = findViewById(R.id.btn_audio_record);
     }
 
     private void setListener() {
-        mBtnRecord.setOnTouchListener(mOnTouchListener);
+        mBtnMediaRecorder.setOnTouchListener(mOnTouchListener);
+        mBtnAudioRecord.setOnTouchListener(mOnTouchListener);
     }
 
     private void initData() {
@@ -55,4 +86,5 @@ public class MainActivity extends BaseActivity {
     public void doRecord() {
 
     }
+
 }
