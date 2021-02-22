@@ -40,7 +40,7 @@ public enum  AudioRecordManager {
     public void init(){
         mRecordBufSize = AudioRecord.getMinBufferSize(mSampleRateInHz,mChannelConfig,mAudioFormat);
         mAudioRecord = new AudioRecord(mAudioSource,mSampleRateInHz,mChannelConfig,mAudioFormat,mRecordBufSize);
-        mRecordingFile = new File(FilePathUtil.getRecordLocalPath());
+        mRecordingFile = new File(FilePathUtil.getAudioRecordLocalPath());
         if (!mRecordingFile.exists()){
             mRecordingFile.getParentFile().mkdirs();
         }
@@ -52,7 +52,7 @@ public enum  AudioRecordManager {
     }
 
     public void startRecording(){
-        Log.e("Record","startRecording");
+        ShowLogUtil.info("Record","startRecording");
         if (mAudioRecord == null || mAudioRecord.getState() == AudioRecord.STATE_UNINITIALIZED){
             return;
         }
@@ -70,7 +70,7 @@ public enum  AudioRecordManager {
                         }
                     }
                     dos.close();
-                    Log.e("Record","dos");
+                    ShowLogUtil.info("Record","dos");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -80,7 +80,7 @@ public enum  AudioRecordManager {
     }
 
     public void stopRecording(){
-        Log.e("Record","stopRecording");
+        ShowLogUtil.info("Record","stopRecording");
         if (mAudioRecord == null){
             return;
         }

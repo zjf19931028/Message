@@ -1,25 +1,13 @@
 package com.future.message;
 
-import android.Manifest;
-import android.media.AudioManager;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-
 import com.future.message.base.BaseActivity;
 import com.future.message.constant.Constant;
-import com.future.message.util.App;
 import com.future.message.util.AudioRecordManager;
 import com.future.message.util.MediaRecorderManager;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 
 public class MainActivity extends BaseActivity {
 
@@ -36,21 +24,21 @@ public class MainActivity extends BaseActivity {
                 case R.id.btn_media_recorder:
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            AudioRecordManager.SINGLETON.init();
-                            AudioRecordManager.SINGLETON.startRecording();
+                            MediaRecorderManager.SINGLETON.startRecord();
                             break;
                         case MotionEvent.ACTION_UP:
-                            AudioRecordManager.SINGLETON.stopRecording();
+                            MediaRecorderManager.SINGLETON.stopRecord();
                             break;
                     }
                     break;
                 case R.id.btn_audio_record:
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            MediaRecorderManager.SINGLETON.startRecord();
+                            AudioRecordManager.SINGLETON.init();
+                            AudioRecordManager.SINGLETON.startRecording();
                             break;
                         case MotionEvent.ACTION_UP:
-                            MediaRecorderManager.SINGLETON.stopRecord();
+                            AudioRecordManager.SINGLETON.stopRecording();
                             break;
                     }
                     break;
