@@ -10,6 +10,8 @@ import android.Manifest;
  */
 public class Constant {
     public static final int RECORD_AUDIO_CODE = 0x01;
+    public static final int LOCATION_CODE = 0x02;
     public static final String[] RECORD_AUDIO_PERMISSION = new String[]{Manifest.permission.RECORD_AUDIO};
+    public static final String[] LOCATION_PERMISSION = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
 
 }
