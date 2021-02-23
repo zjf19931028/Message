@@ -1,13 +1,17 @@
 package com.future.message;
 
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import com.future.message.base.BaseActivity;
 import com.future.message.constant.Constant;
 import com.future.message.util.AudioRecordManager;
+import com.future.message.util.FileUtil;
 import com.future.message.util.MediaRecorderManager;
+
+import java.io.File;
 
 public class MainActivity extends BaseActivity {
 
@@ -67,7 +71,15 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initData() {
-
+        File file = FileUtil.createFile();
+//        FileUtil.byteWrite(file);
+//        FileUtil.byteRead(file);
+//        File newFile = FileUtil.createFile();
+//        FileUtil.byteReadToWrite(file,newFile);
+        FileUtil.stringWrite(file);
+        FileUtil.stringRead(file);
+        File newFile = FileUtil.createFile();
+        FileUtil.stringReadToWrite(file,newFile);
     }
 
     @Override
