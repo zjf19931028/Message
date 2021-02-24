@@ -2,6 +2,7 @@ package com.future.message.util;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +10,9 @@ import android.location.LocationManager;
 import android.provider.Settings;
 
 import androidx.fragment.app.FragmentActivity;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Author: JfangZ
@@ -89,8 +93,39 @@ public enum BluetoothManager {
         }
     }
 
-    public void pin(){
+    /**
+     * 配对
+     * @param device
+     */
+    public void pin(BluetoothDevice device){
+        if (device == null)return;
+        if (!isEnable())return;
+        cancelScanBt();
+        // 如果没有配对才去配对
+        if (device.getBondState() == BluetoothDevice.BOND_NONE){
+            try {
+                Method createBondMethod = device.getClass().getMethod("createBond");
+                Boolean returnValue = (Boolean) createBondMethod.invoke(device);
+                returnValue.booleanValue();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    public void cancelPinBt(BluetoothDevice device){
+        if (device == null)return;
+        if (!isEnable())return;
+        // 如果没有配对就不用取消配对了
+        if (device.getBondState() != BluetoothDevice.BOND_NONE){
+            try {
+                Method createBondMethod = device.getClass().getMethod("createBond");
+                Boolean returnValue = (Boolean) createBondMethod.invoke(device);
+                returnValue.booleanValue();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

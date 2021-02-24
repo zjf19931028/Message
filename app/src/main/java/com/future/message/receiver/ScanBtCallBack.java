@@ -12,4 +12,10 @@ public interface ScanBtCallBack {
     void onScanStarted();
     void onScanFinished();
     void onScanning(BluetoothDevice device);
+    void onBondRequest(BluetoothDevice device);
+    void onBondFail();
+    void onBondBonding();
+    void onBondSuccess();
+    void onConnectSuccess();
+    void onConnectFail();
 }
