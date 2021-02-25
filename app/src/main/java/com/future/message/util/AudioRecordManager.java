@@ -19,7 +19,7 @@ import java.io.IOException;
  * Date: 2021/2/3 20:41
  * Description: 录音管理类
  */
-public enum  AudioRecordManager {
+public enum AudioRecordManager {
     SINGLETON;
     // 采样率
     private final int mSampleRateInHz = 44100;
@@ -37,11 +37,11 @@ public enum  AudioRecordManager {
     private AudioRecord mAudioRecord;
 
 
-    public void init(){
-        mRecordBufSize = AudioRecord.getMinBufferSize(mSampleRateInHz,mChannelConfig,mAudioFormat);
-        mAudioRecord = new AudioRecord(mAudioSource,mSampleRateInHz,mChannelConfig,mAudioFormat,mRecordBufSize);
+    public void init() {
+        mRecordBufSize = AudioRecord.getMinBufferSize(mSampleRateInHz, mChannelConfig, mAudioFormat);
+        mAudioRecord = new AudioRecord(mAudioSource, mSampleRateInHz, mChannelConfig, mAudioFormat, mRecordBufSize);
         mRecordingFile = new File(FilePathUtil.getAudioRecordLocalPath());
-        if (!mRecordingFile.exists()){
+        if (!mRecordingFile.exists()) {
             mRecordingFile.getParentFile().mkdirs();
         }
         try {
@@ -51,26 +51,26 @@ public enum  AudioRecordManager {
         }
     }
 
-    public void startRecording(){
-        ShowLogUtil.info("Record","startRecording");
-        if (mAudioRecord == null || mAudioRecord.getState() == AudioRecord.STATE_UNINITIALIZED){
+    public void startRecording() {
+        ShowLogUtil.info("Record", "startRecording");
+        if (mAudioRecord == null || mAudioRecord.getState() == AudioRecord.STATE_UNINITIALIZED) {
             return;
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(mRecordingFile,true)));
+                    DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(mRecordingFile, true)));
                     byte[] buffer = new byte[mRecordBufSize];
                     mAudioRecord.startRecording();
-                    while (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING){
+                    while (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
                         int bufferReadResult = mAudioRecord.read(buffer, 0, mRecordBufSize);
                         for (int i = 0; i < bufferReadResult; i++) {
                             dos.write(buffer[i]);
                         }
                     }
                     dos.close();
-                    ShowLogUtil.info("Record","dos");
+                    ShowLogUtil.info("Record", "dos");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -79,15 +79,13 @@ public enum  AudioRecordManager {
         }).start();
     }
 
-    public void stopRecording(){
-        ShowLogUtil.info("Record","stopRecording");
-        if (mAudioRecord == null){
-            return;
-        }
-        if (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING){
+    public void stopRecording() {
+        ShowLogUtil.info("Record", "stopRecording");
+        if (mAudioRecord == null) return;
+        if (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
             mAudioRecord.stop();
         }
-        if (mAudioRecord.getState() == AudioRecord.STATE_INITIALIZED){
+        if (mAudioRecord.getState() == AudioRecord.STATE_INITIALIZED) {
             mAudioRecord.release();
         }
     }

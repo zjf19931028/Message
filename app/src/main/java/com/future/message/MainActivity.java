@@ -15,10 +15,13 @@ import com.future.message.receiver.ScanBlueReceiver;
 import com.future.message.receiver.ScanBtCallBack;
 import com.future.message.util.AudioRecordManager;
 import com.future.message.util.BluetoothManager;
+import com.future.message.util.FileUtil;
 import com.future.message.util.MediaRecorderManager;
+import com.future.message.util.ReflexUtil;
 import com.future.message.util.ShowLogUtil;
 import com.future.message.util.Solution;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 public class MainActivity extends BaseActivity {
@@ -36,7 +39,27 @@ public class MainActivity extends BaseActivity {
                 case R.id.btn_media_recorder:
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            MediaRecorderManager.SINGLETON.startRecord();
+                            MediaRecorderManager.SINGLETON.startRecord(new MediaRecorderManager.IOnMediaRecordListener() {
+                                @Override
+                                public void onStart() {
+                                    ShowLogUtil.info("开始录音啦");
+                                }
+
+                                @Override
+                                public void onStop() {
+                                    ShowLogUtil.info("结束录音啦");
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    ShowLogUtil.info("录音出错啦");
+                                }
+
+                                @Override
+                                public void onVolumeChange(int curVolume) {
+                                    ShowLogUtil.info("录音声音变化啦 " + curVolume);
+                                }
+                            });
                             break;
                         case MotionEvent.ACTION_UP:
                             MediaRecorderManager.SINGLETON.stopRecord();
@@ -79,17 +102,35 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initData() {
-//        File file = FileUtil.createFile();
-//        FileUtil.byteWrite(file);
-//        FileUtil.byteRead(file);
+        doFile();
+    }
+
+    @Override
+    public void doRecord() {
+
+    }
+
+    private void doReflex(){
+        ReflexUtil.getInfo();
+    }
+
+    private void doFile() {
+        File file = FileUtil.createFile();
+        FileUtil.byteWrite(file);
+        FileUtil.byteRead(file);
+        FileUtil.delete(file);
+        ShowLogUtil.info(file.getParentFile().delete());
+
+
 //        File newFile = FileUtil.createFile();
-//        FileUtil.byteReadToWrite(file,newFile);
+//        FileUtil.byteReadToWrite(file, newFile);
 //        FileUtil.stringWrite(file);
 //        FileUtil.stringRead(file);
-//         File newFile = FileUtil.createFile();
-//        FileUtil.stringReadToWrite(file,newFile);
+//        File newFile = FileUtil.createFile();
+//        FileUtil.stringReadToWrite(file, newFile);
+    }
 
-
+    private void doBluetooth() {
         if (!hasPermission(Constant.LOCATION_PERMISSION)) {
             requestPermission(Constant.LOCATION_CODE, Constant.LOCATION_PERMISSION);
         }
@@ -168,11 +209,6 @@ public class MainActivity extends BaseActivity {
         registerReceiver(scanBlueReceiver, filter4);
         registerReceiver(scanBlueReceiver, filter5);
         BluetoothManager.SINGLETON.scanBt();
-    }
-
-    @Override
-    public void doRecord() {
-
     }
 
 }

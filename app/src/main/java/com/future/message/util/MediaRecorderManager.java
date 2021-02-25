@@ -1,20 +1,29 @@
 package com.future.message.util;
 
 import android.media.MediaRecorder;
+import android.os.Handler;
+
 import java.io.File;
 import java.io.IOException;
 
 /**
  * Author: JfangZ
- * Email:zhangjingfang@jeejio.com
+ * Email:zhangjin
+ * gfang@jeejio.com
  * Date: 2021/2/4 14:26
  * Description: 录音管理类
  */
 public enum MediaRecorderManager {
     SINGLETON;
-    private MediaRecorder mMediaRecorder;
-    private File mOriginalFile;
     public static final int MAX_LENGTH = 1000 * 60;
+    private MediaRecorder mMediaRecorder;
+    private IOnMediaRecordListener mListener;
+    private File mOriginalFile;
+    private Handler mHandler;
+
+    MediaRecorderManager() {
+        mHandler = new Handler();
+    }
 
     /**
      * Author: JfangZ
@@ -22,10 +31,10 @@ public enum MediaRecorderManager {
      * Date: 2021/2/4 15:23
      * Description: 开始录音
      */
-    public void startRecord() {
-        if (mMediaRecorder == null) {
+    public void startRecord(IOnMediaRecordListener listener) {
+        if (mMediaRecorder == null)
             mMediaRecorder = new MediaRecorder();
-        }
+        mListener = listener;
         try {
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -38,8 +47,12 @@ public enum MediaRecorderManager {
             mMediaRecorder.setMaxDuration(MAX_LENGTH);
             mMediaRecorder.prepare();
             mMediaRecorder.start();
+            if (mListener != null)
+                mListener.onStart();
         } catch (IOException e) {
             e.printStackTrace();
+            if (mListener != null)
+                mListener.onError(e);
         }
     }
 
@@ -56,6 +69,8 @@ public enum MediaRecorderManager {
                 mMediaRecorder.reset();
                 mMediaRecorder.release();
                 mMediaRecorder = null;
+                if (mListener != null)
+                    mListener.onStop();
                 String encryptFilePath = FilePathUtil.getMediaRecorderEncryptLocalPath();
                 File encryptFile = new File(encryptFilePath);
                 if (!encryptFile.exists()) encryptFile.getParentFile().mkdirs();
@@ -63,17 +78,40 @@ public enum MediaRecorderManager {
                 // 密钥
                 String aesSecret = EncryptUtil.generateAesSecret();
                 // 加密录音文件
-                EncryptUtil.encryptFile(mOriginalFile,encryptFile,aesSecret);
+                EncryptUtil.encryptFile(mOriginalFile, encryptFile, aesSecret);
                 // 解密
-                EncryptUtil.decryptFile(encryptFile,aesSecret);
+                EncryptUtil.decryptFile(encryptFile, aesSecret);
             } catch (Exception e) {
                 mMediaRecorder.reset();
                 mMediaRecorder.release();
                 mMediaRecorder = null;
+                if (mListener != null)
+                    mListener.onError(e);
             }
 
         }
-
     }
 
+    public interface IOnMediaRecordListener {
+        void onStart();
+
+        void onStop();
+
+        void onError(Exception e);
+
+        void onVolumeChange(int curVolume);
+    }
+
+    private class CurVolumeRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            if (mMediaRecorder == null || mListener == null) return;
+            int maxAmplitude = mMediaRecorder.getMaxAmplitude();
+            mListener.onVolumeChange(maxAmplitude);
+
+            // 每隔 100ms 获取一次
+            mHandler.postDelayed(this,100);
+        }
+    }
 }
