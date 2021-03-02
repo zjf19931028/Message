@@ -33,20 +33,29 @@ public class FileUtil {
      * Description: 创建文件
      */
     public static File createFile() {
-        File file = new File(App.getInstance().getApplicationContext().getCacheDir()
-                + File.separator + "zjf"
-                + File.separator + new SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(new Date(System.currentTimeMillis()))
-                + File.separator + System.currentTimeMillis() + ".txt");
-        if (!file.exists()) {
-            try {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-                return file;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        // /data/user/0/com.future.message/cache/zjf5586373986259348895.txt
+        File tempFile = null;
+        try {
+            tempFile = File.createTempFile("temp", ".txt");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null;
+        return tempFile;
+        // /data/user/0/com.future.message/cache/zjf/20210302/1614669744032.txt
+//        File file = new File(App.getInstance().getApplicationContext().getCacheDir()
+//                + File.separator + "zjf"
+//                + File.separator + new SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(new Date(System.currentTimeMillis()))
+//                + File.separator + System.currentTimeMillis() + ".txt");
+//        if (!file.exists()) {
+//            try {
+//                file.getParentFile().mkdirs();
+//                file.createNewFile();
+//                return file;
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return null;
     }
 
     public static void delete(File deleteFile) {

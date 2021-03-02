@@ -12,7 +12,7 @@ import android.widget.Button;
 import com.future.message.base.BaseActivity;
 import com.future.message.constant.Constant;
 import com.future.message.receiver.ScanBlueReceiver;
-import com.future.message.receiver.ScanBtCallBack;
+import com.future.message.receiver.callback.ScanBtCallBack;
 import com.future.message.util.AudioRecordManager;
 import com.future.message.util.BluetoothManager;
 import com.future.message.util.FileUtil;
@@ -22,7 +22,6 @@ import com.future.message.util.ShowLogUtil;
 import com.future.message.util.Solution;
 
 import java.io.File;
-import java.lang.reflect.Method;
 
 public class MainActivity extends BaseActivity {
 
@@ -102,7 +101,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initData() {
-        doFile();
+        int[] a = new int[]{0, 1, 2, 3, 4, 5, 6};
+        boolean containsDuplicate = Solution.containsDuplicate(a);
+        ShowLogUtil.info("containsDuplicate=" + containsDuplicate);
     }
 
     @Override
@@ -110,16 +111,16 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void doReflex(){
+    private void doReflex() {
         ReflexUtil.getInfo();
     }
 
     private void doFile() {
         File file = FileUtil.createFile();
-        FileUtil.byteWrite(file);
-        FileUtil.byteRead(file);
-        FileUtil.delete(file);
-        ShowLogUtil.info(file.getParentFile().delete());
+//        FileUtil.byteWrite(file);
+//        FileUtil.byteRead(file);
+//        FileUtil.delete(file);
+        ShowLogUtil.info("file.getAbsolutePath()=" + file.getAbsolutePath());
 
 
 //        File newFile = FileUtil.createFile();
@@ -161,10 +162,15 @@ public class MainActivity extends BaseActivity {
             public void onScanning(BluetoothDevice device) {
                 if (!TextUtils.isEmpty(device.getName()))
                     ShowLogUtil.info("device=" + device.getName());
-                if (TextUtils.equals("张竟方的iPhone", device.getName())) {
+                if (TextUtils.equals("“张竟方”的 iPhone", device.getName())) {
                     BluetoothManager.SINGLETON.pin(device);
-//                    BluetoothManager.SINGLETON.cancelPinBt(device);
                 }
+//                if (!TextUtils.isEmpty(device.getName()))
+//                    ShowLogUtil.info("device=" + device.getName());
+//                if (TextUtils.equals("张竟方的iPhone", device.getName())) {
+//                    BluetoothManager.SINGLETON.pin(device);
+//                    BluetoothManager.SINGLETON.cancelPinBt(device);
+//                }
             }
 
             @Override
@@ -188,15 +194,6 @@ public class MainActivity extends BaseActivity {
                 ShowLogUtil.info("配对成功");
             }
 
-            @Override
-            public void onConnectSuccess() {
-                ShowLogUtil.info("连接成功");
-            }
-
-            @Override
-            public void onConnectFail() {
-                ShowLogUtil.info("连接失败");
-            }
         });
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         IntentFilter filter2 = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);

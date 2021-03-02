@@ -1,4 +1,4 @@
-package com.future.message.receiver;
+package com.future.message.receiver.callback;
 
 import android.bluetooth.BluetoothDevice;
 
@@ -16,6 +16,4 @@ public interface ScanBtCallBack {
     void onBondFail();
     void onBondBonding();
     void onBondSuccess();
-    void onConnectSuccess();
-    void onConnectFail();
 }

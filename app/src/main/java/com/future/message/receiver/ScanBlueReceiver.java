@@ -5,9 +5,9 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
-import android.util.Log;
 
+import com.future.message.receiver.callback.ConnectBtCallBack;
+import com.future.message.receiver.callback.ScanBtCallBack;
 import com.future.message.util.BluetoothManager;
 import com.future.message.util.ShowLogUtil;
 
@@ -66,6 +66,17 @@ public class ScanBlueReceiver extends BroadcastReceiver {
                         break;
                     case BluetoothDevice.BOND_BONDED:
                         mCallBack.onBondSuccess();
+                        BluetoothManager.SINGLETON.connect(device, new ConnectBtCallBack() {
+                            @Override
+                            public void onConnectSuccess() {
+                                ShowLogUtil.info("连接成功");
+                            }
+
+                            @Override
+                            public void onConnectFail() {
+                                ShowLogUtil.info("连接失败");
+                            }
+                        });
                         break;
                 }
                 break;

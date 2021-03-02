@@ -11,7 +11,9 @@ import android.provider.Settings;
 
 import androidx.fragment.app.FragmentActivity;
 
-import java.lang.reflect.InvocationTargetException;
+import com.future.message.receiver.ConnectBlueTask;
+import com.future.message.receiver.callback.ConnectBtCallBack;
+
 import java.lang.reflect.Method;
 
 /**
@@ -79,30 +81,31 @@ public enum BluetoothManager {
                 .show();
     }
 
-    public void scanBt(){
-        if (!isEnable())return;
-        if (mBluetoothAdapter.isDiscovering()){
+    public void scanBt() {
+        if (!isEnable()) return;
+        if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
         }
         mBluetoothAdapter.startDiscovery();
     }
 
-    public void cancelScanBt(){
-        if (isSupport() && mBluetoothAdapter.isDiscovering()){
+    public void cancelScanBt() {
+        if (isSupport() && mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
         }
     }
 
     /**
      * 配对
+     *
      * @param device
      */
-    public void pin(BluetoothDevice device){
-        if (device == null)return;
-        if (!isEnable())return;
+    public void pin(BluetoothDevice device) {
+        if (device == null) return;
+        if (!isEnable()) return;
         cancelScanBt();
         // 如果没有配对才去配对
-        if (device.getBondState() == BluetoothDevice.BOND_NONE){
+        if (device.getBondState() == BluetoothDevice.BOND_NONE) {
             try {
                 Method createBondMethod = device.getClass().getMethod("createBond");
                 Boolean returnValue = (Boolean) createBondMethod.invoke(device);
@@ -113,11 +116,11 @@ public enum BluetoothManager {
         }
     }
 
-    public void cancelPinBt(BluetoothDevice device){
-        if (device == null)return;
-        if (!isEnable())return;
+    public void cancelPinBt(BluetoothDevice device) {
+        if (device == null) return;
+        if (!isEnable()) return;
         // 如果没有配对就不用取消配对了
-        if (device.getBondState() != BluetoothDevice.BOND_NONE){
+        if (device.getBondState() != BluetoothDevice.BOND_NONE) {
             try {
                 Method createBondMethod = device.getClass().getMethod("createBond");
                 Boolean returnValue = (Boolean) createBondMethod.invoke(device);
@@ -126,6 +129,26 @@ public enum BluetoothManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 连接 (配对之后调用)
+     *
+     * @param device
+     * @param callBack
+     */
+    public void connect(BluetoothDevice device, ConnectBtCallBack callBack) {
+        if (device == null) return;
+        if (!isEnable()) return;
+        cancelScanBt();
+        new ConnectBlueTask(callBack).execute(device);
+    }
+
+    public void connectMAC(String address, ConnectBtCallBack callBack) {
+        if (!isEnable()) return;
+        BluetoothDevice bluetoothDevice = mBluetoothAdapter.getRemoteDevice(address);
+        connect(bluetoothDevice, callBack);
+
     }
 
 
