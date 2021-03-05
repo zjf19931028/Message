@@ -12,6 +12,7 @@ import java.util.Set;
  * Description:
  */
 public class Solution {
+    // 删除排序数组中的重复项
     public static int removeDuplicates(int[] nums) {
         // 定义双指针，第一个指针代表不重复的下标，即index，第二个指针代表每次循环向后推进的下标，即i
         // 比较两个指针的值，如果相等，什么操作都不用做，继续向后循环。
@@ -29,10 +30,7 @@ public class Solution {
         return ++index;
     }
 
-//    public static void rotate(int[] nums, int k) {
-
-//    }
-
+    // 旋转数组
     public static void rotate(int[] nums, int k) {
 //        // 使用额外的数组
         // 时间复杂的O(N)
@@ -81,6 +79,9 @@ public class Solution {
         }
     }
 
+    //  存在重复元素
+    //  int[] a = new int[]{0, 1, 2, 3, 4, 5, 6};
+    //  boolean containsDuplicate = Solution.containsDuplicate(a);
     public static boolean containsDuplicate(int[] nums) {
         // 排序
         // 时间复杂的O(NlogN)

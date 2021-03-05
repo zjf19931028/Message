@@ -20,8 +20,11 @@ import com.future.message.util.MediaRecorderManager;
 import com.future.message.util.ReflexUtil;
 import com.future.message.util.ShowLogUtil;
 import com.future.message.util.Solution;
+import com.future.message.util.SolutionTree;
+import com.future.message.util.TreeNode;
 
 import java.io.File;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
@@ -101,9 +104,27 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initData() {
-        int[] a = new int[]{0, 1, 2, 3, 4, 5, 6};
-        boolean containsDuplicate = Solution.containsDuplicate(a);
-        ShowLogUtil.info("containsDuplicate=" + containsDuplicate);
+        TreeNode root = new TreeNode();
+        root.val = 3;
+        TreeNode left = new TreeNode();
+        left.val = 9;
+        TreeNode right = new TreeNode();
+        right.val = 20;
+        root.left = left;
+        root.right = right;
+        TreeNode rightLeft = new TreeNode();
+        rightLeft.val = 15;
+        TreeNode rightRight = new TreeNode();
+        rightRight.val = 7;
+        root.right.left = rightLeft;
+        root.right.right = rightRight;
+//        List<List<Integer>> lists = SolutionTree.levelOrder(root);
+//        for (int i = 0; i < lists.size(); i++) {
+//            ShowLogUtil.info(" ");
+//            for (int j = 0; j < lists.get(i).size(); j++) {
+//                ShowLogUtil.info("i=" + i + ",j=" + j +","+ lists.get(i).get(j));
+//            }
+//        }
     }
 
     @Override
