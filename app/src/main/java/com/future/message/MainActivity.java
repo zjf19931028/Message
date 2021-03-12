@@ -1,13 +1,17 @@
 package com.future.message;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.annotation.RequiresApi;
 
 import com.future.message.base.BaseActivity;
 import com.future.message.constant.Constant;
@@ -15,6 +19,7 @@ import com.future.message.receiver.ScanBlueReceiver;
 import com.future.message.receiver.callback.ScanBtCallBack;
 import com.future.message.util.AudioRecordManager;
 import com.future.message.util.BluetoothManager;
+import com.future.message.util.CustomPermission;
 import com.future.message.util.FileUtil;
 import com.future.message.util.MediaRecorderManager;
 import com.future.message.util.ReflexUtil;
@@ -26,6 +31,10 @@ import com.future.message.util.TreeNode;
 import java.io.File;
 import java.util.List;
 
+import static com.future.message.constant.Constant.LOCATION_PERMISSION;
+import static com.future.message.constant.Constant.RECORD_AUDIO_CODE;
+import static com.future.message.constant.Constant.RECORD_AUDIO_PERMISSION;
+
 public class MainActivity extends BaseActivity {
 
     private Button mBtnMediaRecorder;
@@ -33,8 +42,8 @@ public class MainActivity extends BaseActivity {
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (!hasPermission(Constant.RECORD_AUDIO_PERMISSION)) {
-                requestPermission(Constant.RECORD_AUDIO_CODE, Constant.RECORD_AUDIO_PERMISSION);
+            if (!hasPermission(RECORD_AUDIO_PERMISSION)) {
+                requestPermission(RECORD_AUDIO_CODE, RECORD_AUDIO_PERMISSION);
                 return false;
             }
             switch (v.getId()) {
@@ -103,21 +112,44 @@ public class MainActivity extends BaseActivity {
         mBtnAudioRecord.setOnTouchListener(mOnTouchListener);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
-        TreeNode root = new TreeNode();
-        root.val = 3;
-        TreeNode left = new TreeNode();
-        left.val = 9;
-        TreeNode right = new TreeNode();
-        right.val = 20;
-        root.left = left;
-        root.right = right;
-        TreeNode rightLeft = new TreeNode();
-        rightLeft.val = 15;
-        TreeNode rightRight = new TreeNode();
-        rightRight.val = 7;
-        root.right.left = rightLeft;
-        root.right.right = rightRight;
+//        if (!hasPermission(new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION})) {
+//            requestPermission(RECORD_AUDIO_CODE, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION});
+//        }
+        int[] a = new int[]{0, 1, 0, 3, 12};
+        for (int i = 0; i < a.length; i++) {
+            ShowLogUtil.info("[" + i + "]=" + a[i]);
+        }
+        int[] moveZeroes = Solution.moveZeroes(a);
+        ShowLogUtil.info("initData");
+        for (int i = 0; i < moveZeroes.length; i++) {
+            ShowLogUtil.info("[" + i + "]=" + moveZeroes[i]);
+        }
+
+
+//        int[] a = new int[]{4, 9, 5, 4, 4};
+//        int[] b = new int[]{9, 4, 9, 8, 4, 6};
+//        int[] intersect = Solution.intersect(a, b);
+//        for (int i = 0; i < intersect.length; i++) {
+//            ShowLogUtil.info("[" + i + "]=" + intersect[i]);
+//        }
+
+//        TreeNode root = new TreeNode();
+//        root.val = 3;
+//        TreeNode left = new TreeNode();
+//        left.val = 9;
+//        TreeNode right = new TreeNode();
+//        right.val = 20;
+//        root.left = left;
+//        root.right = right;
+//        TreeNode rightLeft = new TreeNode();
+//        rightLeft.val = 15;
+//        TreeNode rightRight = new TreeNode();
+//        rightRight.val = 7;
+//        root.right.left = rightLeft;
+//        root.right.right = rightRight;
+
 //        List<List<Integer>> lists = SolutionTree.levelOrder(root);
 //        for (int i = 0; i < lists.size(); i++) {
 //            ShowLogUtil.info(" ");
@@ -130,6 +162,15 @@ public class MainActivity extends BaseActivity {
     @Override
     public void doRecord() {
 
+    }
+
+    private void doPermission() {
+        new CustomPermission(this, true, new CustomPermission.OnFinishedCheck() {
+            @Override
+            public void finishedCheck() {
+                ShowLogUtil.info("finishedCheck");
+            }
+        }, Manifest.permission.CAMERA);
     }
 
     private void doReflex() {
@@ -153,8 +194,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void doBluetooth() {
-        if (!hasPermission(Constant.LOCATION_PERMISSION)) {
-            requestPermission(Constant.LOCATION_CODE, Constant.LOCATION_PERMISSION);
+        if (!hasPermission(LOCATION_PERMISSION)) {
+            requestPermission(Constant.LOCATION_CODE, LOCATION_PERMISSION);
         }
         boolean isSupport = BluetoothManager.SINGLETON.isSupport();
         boolean isEnable = BluetoothManager.SINGLETON.isEnable();
