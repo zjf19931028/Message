@@ -1,8 +1,11 @@
-package com.future.message.util;
+package com.future.message.algorithm;
 
 import android.os.Build;
+import android.text.TextUtils;
 
 import androidx.annotation.RequiresApi;
+
+import com.future.message.util.ShowLogUtil;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,15 +19,16 @@ import java.util.Set;
  * Date: 2021/2/22 18:51
  * Description:
  */
-public class Solution {
+public class SolutionArray {
     // 删除排序数组中的重复项
+    // 双指针
+    // 时间复杂的O(N)
+    // 空间复杂的O(1)
     public static int removeDuplicates(int[] nums) {
         // 定义双指针，第一个指针代表不重复的下标，即index，第二个指针代表每次循环向后推进的下标，即i
         // 比较两个指针的值，如果相等，什么操作都不用做，继续向后循环。
         // 如果不相等，需要把第一个指针向后对进一个，然后赋值为第二个指针的值
         // 直到循环结束，第一个指针的数值增加1，这跟下标是从0开始有关。
-        // 时间复杂的O(N)
-        // 空间复杂的O(1)
         int index = 0;
         for (int i = 1; i < nums.length; i++) {
             if (nums[index] != nums[i]) {
@@ -36,10 +40,13 @@ public class Solution {
     }
 
     // 旋转数组
+    // 使用额外的数组
+    // 时间复杂的O(N)
+    // 空间复杂的O(N)
+    // 数组翻转
+    // 时间复杂的O(2N)
+    // 空间复杂的O(1)
     public static void rotate(int[] nums, int k) {
-//        // 使用额外的数组
-        // 时间复杂的O(N)
-        // 空间复杂的O(N)
 //        k = k % nums.length;
 //        int n = nums.length;
 //        int[] newArr = new int[n];
@@ -50,9 +57,6 @@ public class Solution {
 //            ShowLogUtil.info("newArr[" + i + "]=" + newArr[i]);
 //        }
 
-//        //数组翻转
-        // 时间复杂的O(2N)
-        // 空间复杂的O(1)
 //        k = k % nums.length;
 //        reverse(nums, 0, nums.length - 1);
 //        reverse(nums, 0, k - 1);
@@ -85,12 +89,15 @@ public class Solution {
     }
 
     //  存在重复元素
+    // 排序
+    // 时间复杂的O(NlogN)
+    // 空间复杂的O(logN)
+    // 哈希表
+    // 时间复杂的O(N)
+    // 空间复杂的O(1)
     //  int[] a = new int[]{0, 1, 2, 3, 4, 5, 6};
     //  boolean containsDuplicate = Solution.containsDuplicate(a);
     public static boolean containsDuplicate(int[] nums) {
-        // 排序
-        // 时间复杂的O(NlogN)
-        // 空间复杂的O(logN)
         Arrays.sort(nums);
         for (int i = 0; i < nums.length - 2; i++) {
             if (nums[i] == nums[i + 1]) {
@@ -99,9 +106,6 @@ public class Solution {
         }
         return false;
 
-//        // 哈希表
-//        // 时间复杂的O(N)
-//        // 空间复杂的O(1)
 //        Set<Integer> hashSet = new HashSet<>();
 //        for (int n : nums) {
 //            if (!hashSet.add(n))
@@ -148,11 +152,17 @@ public class Solution {
 //        return Arrays.copyOfRange(intersection, 0, index);
 //    }
 
+
+    // 两个数组的交集
+    //
     // 时间复杂度O(m+n)
     // 空间复杂度O(min(m,n))
-    // 两个数组的交集
+    // 排序+双指针
+    // 时间复杂度
+    // 空间复杂度min(m,n)
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static int[] intersect(int[] nums1, int[] nums2) {
+
         if (nums1.length > nums2.length) {
             return intersect(nums2, nums1);
         }
@@ -177,9 +187,7 @@ public class Solution {
         }
         return Arrays.copyOfRange(intersection, 0, index);
 
-//        // 排序+双指针
-//        // 时间复杂度
-//        // 空间复杂度min(m,n)
+
 //        Arrays.sort(nums1);
 //        Arrays.sort(nums2);
 //        int length1 = nums1.length;
@@ -206,6 +214,7 @@ public class Solution {
 //        return Arrays.copyOfRange(intersection, 0, index);
     }
 
+    // 加一
     // 数学算法
     // 时间复杂度O(n)
     // 空间复杂度O(1)
@@ -221,19 +230,129 @@ public class Solution {
         return digits;
     }
 
+    // 移动零
+    // 双指针
+    // 时间复杂度O(n)
+    // 空间复杂度O(1)
     public static int[] moveZeroes(int[] nums) {
-        int offset = 0;
+        int zeroSum = 0;
         int index = 0;
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] == 0) {
-                offset++;
+                zeroSum++;
             } else {
                 nums[index++] = nums[i];
             }
-            if (i == offset++) {
-                nums[i] = 0;
-            }
+        }
+        while (zeroSum > 0) {
+            nums[nums.length - zeroSum] = 0;
+            zeroSum--;
         }
         return nums;
+    }
+
+    // 两数之和
+    // 双指针
+    // 时间复杂度O(n平方)
+    // 空间复杂度O(1)
+    // 哈希表
+    // 时间复杂度O(n)
+    // 空间复杂度O(n)
+    public static int[] twoSum(int[] nums, int target) {
+        if (nums.length < 2) return null;
+//        for (int i = 0; i < nums.length; i++) {
+//            for (int j = i + 1; j < nums.length; j++) {
+//                if (nums[i] + nums[j] == target)
+//                    return new int[]{i, j};
+//            }
+//        }
+
+        Map<Integer, Integer> hashMap = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (hashMap.containsKey(target - nums[i]))
+                return new int[]{hashMap.get(target - nums[i]), i};
+            hashMap.put(nums[i], i);
+        }
+        return null;
+    }
+
+    // 有效的数独
+    // 哈希表
+    // 时间复杂度O(1)
+    // 空间复杂度O(1)
+    //        String[][] a = new String[][]{
+    //                {"5", "3", ".", ".", "7", ".", ".", ".", "."},
+    //                {"6", ".", ".", "1", "9", "5", ".", ".", "."},
+    //                {".", "9", "8", ".", ".", ".", ".", "6", "."},
+    //                {"8", ".", ".", ".", "6", ".", ".", ".", "3"},
+    //                {"4", ".", ".", "8", ".", "3", ".", ".", "1"},
+    //                {"7", ".", ".", ".", "2", ".", ".", ".", "6"},
+    //                {".", "6", ".", ".", ".", ".", "2", "8", "."},
+    //                {".", ".", ".", "4", "1", "9", ".", ".", "5"},
+    //                {".", ".", ".", ".", "8", ".", ".", "7", "9"}};
+    public static boolean isValidSudoku(String[][] board) {
+        // key值，value出现次数
+        Map<Integer, Integer>[] rows = new HashMap[9];
+        Map<Integer, Integer>[] columns = new HashMap[9];
+        Map<Integer, Integer>[] boxes = new HashMap[9];
+        for (int i = 0; i < 9; i++) {
+            rows[i] = new HashMap<>();
+            columns[i] = new HashMap<>();
+            boxes[i] = new HashMap<>();
+        }
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (!TextUtils.equals(board[i][j], ".")) {
+                    int n = Integer.valueOf(board[i][j]);
+                    int box_index = i / 3 * 3 + j / 3;
+                    rows[i].put(n, rows[i].getOrDefault(n, 0) + 1);
+                    columns[j].put(n, columns[j].getOrDefault(n, 0) + 1);
+                    boxes[box_index].put(n, boxes[box_index].getOrDefault(n, 0) + 1);
+                    if (rows[i].get(n) > 1 || columns[j].get(n) > 1 || boxes[box_index].get(n) > 1)
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    // 旋转图像
+    // 使用辅佐数组
+    // 时间复杂度O(n平方)
+    // 空间复杂度O(n平方)
+    // 原地旋转
+    // 用翻转代替旋转
+    // int[][] matrix = {{1,2,3},{4,5,6},{7,8,9}};
+    public static void rotate(int[][] matrix) {
+        int n = matrix.length;
+        int[][] new_matrix = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                new_matrix[j][n - 1 - i] = matrix[i][j];
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = new_matrix[i][j];
+            }
+        }
+
+//        int columnLength = matrix[0].length;
+//        for (int i = 0; i < matrix.length; i++) {
+//            for (int j = i; j < matrix[i].length - 1; j++) {
+//                if (i != j) {
+//                    for (int k = 0; k < 4; k++) {
+//                        // matrix[i][j]、matrix[rowLength-i][j]、matrix[i][columnLength-j]、matrix[rowLength-i][columnLength-j]
+//                        // matrix[i][j] = matrix[rowLength-i][j]
+//                        // matrix[rowLength-i][j] = matrix[rowLength-i][columnLength-j]
+//                        // matrix[rowLength-i][columnLength-j] = matrix[i][columnLength-j]
+//                        // matrix[i][columnLength-j] = matrix[i][j]
+//                        int temp = matrix[i][j];
+//                        matrix[i][j] = matrix[rowLength-i][j];
+//                    }
+//                }
+//            }
+//        }
     }
 }

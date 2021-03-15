@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import androidx.annotation.RequiresApi;
 
+import com.future.message.algorithm.SolutionString;
 import com.future.message.base.BaseActivity;
 import com.future.message.constant.Constant;
 import com.future.message.receiver.ScanBlueReceiver;
@@ -24,12 +25,8 @@ import com.future.message.util.FileUtil;
 import com.future.message.util.MediaRecorderManager;
 import com.future.message.util.ReflexUtil;
 import com.future.message.util.ShowLogUtil;
-import com.future.message.util.Solution;
-import com.future.message.util.SolutionTree;
-import com.future.message.util.TreeNode;
 
 import java.io.File;
-import java.util.List;
 
 import static com.future.message.constant.Constant.LOCATION_PERMISSION;
 import static com.future.message.constant.Constant.RECORD_AUDIO_CODE;
@@ -117,24 +114,8 @@ public class MainActivity extends BaseActivity {
 //        if (!hasPermission(new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION})) {
 //            requestPermission(RECORD_AUDIO_CODE, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION});
 //        }
-        int[] a = new int[]{0, 1, 0, 3, 12};
-        for (int i = 0; i < a.length; i++) {
-            ShowLogUtil.info("[" + i + "]=" + a[i]);
-        }
-        int[] moveZeroes = Solution.moveZeroes(a);
-        ShowLogUtil.info("initData");
-        for (int i = 0; i < moveZeroes.length; i++) {
-            ShowLogUtil.info("[" + i + "]=" + moveZeroes[i]);
-        }
-
-
-//        int[] a = new int[]{4, 9, 5, 4, 4};
-//        int[] b = new int[]{9, 4, 9, 8, 4, 6};
-//        int[] intersect = Solution.intersect(a, b);
-//        for (int i = 0; i < intersect.length; i++) {
-//            ShowLogUtil.info("[" + i + "]=" + intersect[i]);
-//        }
-
+        int reverse = SolutionString.reverse(-2147483648);
+        ShowLogUtil.info("reverse="+reverse);
 //        TreeNode root = new TreeNode();
 //        root.val = 3;
 //        TreeNode left = new TreeNode();
