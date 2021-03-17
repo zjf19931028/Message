@@ -1,4 +1,4 @@
-package com.future.message.algorithm;
+package com.future.message.algorithm.bean;
 
 /**
  * Author: JfangZ
@@ -7,14 +7,14 @@ package com.future.message.algorithm;
  * Description:
  */
 public class ListNode {
-    int val;
+    public int val;
     public ListNode next;
 
     public ListNode(int x) {
         val = x;
     }
 
-    ListNode(int val, ListNode next) {
+    public ListNode(int val, ListNode next) {
         this.val = val;
         this.next = next;
     }

@@ -13,11 +13,13 @@ import android.widget.Button;
 
 import androidx.annotation.RequiresApi;
 
-import com.future.message.algorithm.ListNode;
-import com.future.message.algorithm.MyCircularQueue;
-import com.future.message.algorithm.MyQueue;
 import com.future.message.algorithm.SolutionLinkedList;
-import com.future.message.algorithm.SolutionString;
+import com.future.message.algorithm.SolutionTreeNode;
+import com.future.message.algorithm.bean.ListNode;
+import com.future.message.algorithm.bean.MyHashMap;
+import com.future.message.algorithm.bean.MyHashSet;
+import com.future.message.algorithm.bean.MyLinkedList;
+import com.future.message.algorithm.bean.TreeNode;
 import com.future.message.base.BaseActivity;
 import com.future.message.constant.Constant;
 import com.future.message.receiver.ScanBlueReceiver;
@@ -31,8 +33,11 @@ import com.future.message.util.ReflexUtil;
 import com.future.message.util.ShowLogUtil;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 import static com.future.message.constant.Constant.LOCATION_PERMISSION;
 import static com.future.message.constant.Constant.RECORD_AUDIO_CODE;
@@ -117,6 +122,49 @@ public class MainActivity extends BaseActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
+//        ListNode l1 = new ListNode(1);
+//        ListNode l2 = new ListNode(1);
+//        ListNode l3 = new ListNode(1);
+//        ListNode l4 = new ListNode(1);
+//        ListNode l5 = new ListNode(1);
+//        ListNode l6 = new ListNode(1);
+//        l1.next = l2;
+//        l2.next = l3;
+//        l3.next = l4;
+//        l4.next = l5;
+//        l5.next = l6;
+//        l6.next = null;
+//        boolean hasCycle = SolutionLinkedList.hasCycle(l1);
+//        ShowLogUtil.info("hasCycle=" + hasCycle);
+
+        TreeNode root = new TreeNode();
+        root.val = 3;
+        TreeNode left = new TreeNode();
+        left.val = 9;
+        TreeNode right = new TreeNode();
+        right.val = 20;
+        TreeNode leftLeft = new TreeNode();
+        leftLeft.val = 9;
+        TreeNode leftLeftLeft = new TreeNode();
+        leftLeftLeft.val = 9;
+        TreeNode rightLeft = new TreeNode();
+        rightLeft.val = 15;
+        TreeNode rightRight = new TreeNode();
+        rightRight.val = 7;
+        root.left = left;
+        root.right = right;
+        root.left.left = leftLeft;
+        root.left.left.left = leftLeftLeft;
+        root.right.left = rightLeft;
+        root.right.right = rightRight;
+        List<List<Integer>> lists = SolutionTreeNode.levelOrder(root);
+        for (int i = 0; i < lists.size(); i++) {
+            for (int j = 0; j < lists.get(i).size(); j++) {
+                ShowLogUtil.info("i=" + i + ",j=" + j + "," + lists.get(i).get(j));
+            }
+        }
+
+
 //        if (!hasPermission(new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION})) {
 //            requestPermission(RECORD_AUDIO_CODE, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION});
 //        }
@@ -145,21 +193,21 @@ public class MainActivity extends BaseActivity {
 //        if (q.isEmpty() == false) {
 //            ShowLogUtil.info(q.Front());
 //        }
-        // 1. Initialize a queue.
-        Queue<Integer> q = new LinkedList();
-        // 2. Get the first element - return null if queue is empty.
-        ShowLogUtil.info("The first element is: " + q.peek());
-        // 3. Push new element.
-        q.offer(5);
-        q.offer(13);
-        q.offer(8);
-        q.offer(6);
-        // 4. Pop an element.
-        q.poll();
-        // 5. Get the first element.
-        ShowLogUtil.info("The first element is: " + q.peek());
-        // 7. Get the size of the queue.
-        ShowLogUtil.info("The size is: " + q.size());
+//        // 1. Initialize a queue.
+//        Queue<Integer> q = new LinkedList();
+//        // 2. Get the first element - return null if queue is empty.
+//        ShowLogUtil.info("The first element is: " + q.peek());
+//        // 3. Push new element.
+//        q.offer(5);
+//        q.offer(13);
+//        q.offer(8);
+//        q.offer(6);
+//        // 4. Pop an element.
+//        q.poll();
+//        // 5. Get the first element.
+//        ShowLogUtil.info("The first element is: " + q.peek());
+//        // 7. Get the size of the queue.
+//        ShowLogUtil.info("The size is: " + q.size());
 //        MyCircularQueue obj = new MyCircularQueue(5);
 //        boolean param_1 = obj.enQueue(1);
 //        boolean param_7 = obj.enQueue(1);
