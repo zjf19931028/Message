@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Author: JfangZ
@@ -70,25 +71,34 @@ public class SolutionTreeNode {
     // 时间复杂度O()
     // 空间复杂度O()
     public static List<List<Integer>> levelOrder(TreeNode root) {
-        if (root == null) new ArrayList<List<Integer>>();
         List<List<Integer>> res = new ArrayList<List<Integer>>();
-        LinkedList<TreeNode> queue = new LinkedList<>();
-        queue.add(root);
-        while (queue.size() > 0) {
-            List<Integer> temp = new ArrayList<>();
+        if (root == null) new ArrayList<List<Integer>>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int level = 0;
+        while (!queue.isEmpty()) {
+            level++;
+            List<Integer> tempList = new ArrayList<>();
             int size = queue.size();
             for (int i = 0; i < size; i++) {
-                TreeNode t = queue.remove();
-                temp.add(t.val);
+                TreeNode t = queue.poll();
+                tempList.add(t.val);
                 if (t.left != null)
-                    queue.add(t.left);
+                    queue.offer(t.left);
                 if (t.right != null)
-                    queue.add(t.right);
+                    queue.offer(t.right);
             }
-            res.add(temp);
+            if (level % 2 == 1) {
+                int length = tempList.size();
+                for (int i = 0; i < length / 2; i++) {
+                    int temp = tempList.get(i);
+                    tempList.set(i, tempList.get(length - 1 - i));
+                    tempList.set(length - 1 - i, temp);
+                }
+            }
+            res.add(tempList);
         }
         return res;
-
 
 //        if (root == null) {
 //            return new ArrayList<List<Integer>>();
@@ -165,5 +175,8 @@ public class SolutionTreeNode {
 //        }
 //        parent.add(child3);
 //        return parent;
+//    }
+
+//    public static boolean ergodic(TreeNode root) {
 //    }
 }

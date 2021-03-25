@@ -5,7 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context=".MainActivity">
+<!--    <com.future.message.view.DrinkWaterView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"/>-->
+<!--    <com.future.message.view.WaterDropView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"/>-->
 
     <Button
         android:id="@+id/btn_media_recorder"
@@ -18,5 +25,7 @@
         android:id="@+id/btn_audio_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
+
         android:text="AudioRecord录音"/>
 </LinearLayout>

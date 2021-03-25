@@ -1,6 +1,7 @@
-package com.future.message.util;
+package com.future.message.java;
 
 import com.future.message.bean.FruitBean;
+import com.future.message.util.ShowLogUtil;
 
 import java.lang.reflect.Method;
 
@@ -8,7 +9,7 @@ import java.lang.reflect.Method;
  * Author: JfangZ
  * Email: zhangjingfang@jeejio.com
  * Date: 2021/2/25 11:39
- * Description:
+ * Description: 反射
  */
 public class ReflexUtil {
     public static void getInfo() {
