@@ -1,23 +1,34 @@
 package com.future.message;
 
 import android.Manifest;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.ArraySet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 
+import com.future.message.algorithm.SolutionArray;
 import com.future.message.algorithm.SolutionLinkedList;
 import com.future.message.algorithm.SolutionTreeNode;
 import com.future.message.algorithm.bean.ListNode;
 import com.future.message.algorithm.bean.TreeNode;
 import com.future.message.base.BaseActivity;
+import com.future.message.base.SayHello;
+import com.future.message.base.Test;
+import com.future.message.base.service.MyService;
+import com.future.message.bean.FruitBean;
 import com.future.message.constant.Constant;
 import com.future.message.receiver.ScanBlueReceiver;
 import com.future.message.receiver.callback.ScanBtCallBack;
@@ -30,7 +41,12 @@ import com.future.message.java.ReflexUtil;
 import com.future.message.util.ShowLogUtil;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.future.message.constant.Constant.LOCATION_PERMISSION;
 import static com.future.message.constant.Constant.RECORD_AUDIO_CODE;
@@ -84,6 +100,7 @@ public class MainActivity extends BaseActivity {
                             AudioRecordManager.SINGLETON.init();
                             AudioRecordManager.SINGLETON.startRecording();
                             break;
+
                         case MotionEvent.ACTION_UP:
                             AudioRecordManager.SINGLETON.stopRecording();
                             break;
@@ -116,25 +133,72 @@ public class MainActivity extends BaseActivity {
     private void setListener() {
         mBtnMediaRecorder.setOnTouchListener(mOnTouchListener);
         mBtnAudioRecord.setOnTouchListener(mOnTouchListener);
+        // 子线程跳转界面
         mBtnMediaRecorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(MainActivity.this,TextViewLinkActivity.class));
+                        startActivity(new Intent(MainActivity.this, TextViewLinkActivity.class));
                     }
                 }).start();
             }
         });
+        findViewById(R.id.btn_start_service).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MyService.class);
+                startService(intent);
+            }
+        });
+        findViewById(R.id.btn_stop_service).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MyService.class);
+                stopService(intent);
+            }
+        });
+        findViewById(R.id.bind_service).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MyService.class);
+                bindService(intent, mServiceConnection, FLAG_SERVICE_CONNECTION);
 
+            }
+        });
+        findViewById(R.id.unbind_service).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    unbindService(mServiceConnection);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+
+    private int FLAG_SERVICE_CONNECTION = 0;
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ShowLogUtil.info("onServiceConnected");
+            MyService.MyBinder binder = (MyService.MyBinder) service;
+            int progress = binder.getProgress();
+            ShowLogUtil.info("progress=" + progress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            ShowLogUtil.info("onServiceDisconnected");
+
+        }
+    };
 
 
     private void initData() {
-
-
-
+        Test.test(SayHello.class);
 
     }
 

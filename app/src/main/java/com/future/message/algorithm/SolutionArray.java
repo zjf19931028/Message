@@ -300,19 +300,19 @@ public class SolutionArray {
             columns[i] = new HashMap<>();
             boxes[i] = new HashMap<>();
         }
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (!TextUtils.equals(board[i][j], ".")) {
-                    int n = Integer.valueOf(board[i][j]);
-                    int box_index = i / 3 * 3 + j / 3;
-                    rows[i].put(n, rows[i].getOrDefault(n, 0) + 1);
-                    columns[j].put(n, columns[j].getOrDefault(n, 0) + 1);
-                    boxes[box_index].put(n, boxes[box_index].getOrDefault(n, 0) + 1);
-                    if (rows[i].get(n) > 1 || columns[j].get(n) > 1 || boxes[box_index].get(n) > 1)
-                        return false;
-                }
-            }
-        }
+//        for (int i = 0; i < board.length; i++) {
+//            for (int j = 0; j < board[i].length; j++) {
+//                if (!TextUtils.equals(board[i][j], ".")) {
+//                    int n = Integer.valueOf(board[i][j]);
+//                    int box_index = i / 3 * 3 + j / 3;
+//                    rows[i].put(n, rows[i].getOrDefault(n, 0) + 1);
+//                    columns[j].put(n, columns[j].getOrDefault(n, 0) + 1);
+//                    boxes[box_index].put(n, boxes[box_index].getOrDefault(n, 0) + 1);
+//                    if (rows[i].get(n) > 1 || columns[j].get(n) > 1 || boxes[box_index].get(n) > 1)
+//                        return false;
+//                }
+//            }
+//        }
         return true;
     }
 
@@ -323,36 +323,36 @@ public class SolutionArray {
     // 空间复杂度O(n平方)
     // 原地旋转
     // 用翻转代替旋转
-    // int[][] matrix = {{1,2,3},{4,5,6},{7,8,9}};
+    // int[][] matrix = {{1,2,3,4},{4,5,6,5},{7,8,9,1}{4,4,6,5}};
+    //   SolutionArray.rotate(matrix);
+    //        for (int i = 0; i < matrix.length; i++) {
+    //            for (int j = 0; j < matrix.length; j++) {
+    //                ShowLogUtil.info(matrix[i][j]);
+    //            }
+    //        }
     public static void rotate(int[][] matrix) {
-        int n = matrix.length;
-        int[][] new_matrix = new int[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                new_matrix[j][n - 1 - i] = matrix[i][j];
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                matrix[i][j] = new_matrix[i][j];
-            }
-        }
-
-//        int columnLength = matrix[0].length;
-//        for (int i = 0; i < matrix.length; i++) {
-//            for (int j = i; j < matrix[i].length - 1; j++) {
-//                if (i != j) {
-//                    for (int k = 0; k < 4; k++) {
-//                        // matrix[i][j]、matrix[rowLength-i][j]、matrix[i][columnLength-j]、matrix[rowLength-i][columnLength-j]
-//                        // matrix[i][j] = matrix[rowLength-i][j]
-//                        // matrix[rowLength-i][j] = matrix[rowLength-i][columnLength-j]
-//                        // matrix[rowLength-i][columnLength-j] = matrix[i][columnLength-j]
-//                        // matrix[i][columnLength-j] = matrix[i][j]
-//                        int temp = matrix[i][j];
-//                        matrix[i][j] = matrix[rowLength-i][j];
-//                    }
-//                }
+//        int n = matrix.length;
+//        int[][] new_matrix = new int[n][n];
+//        for (int i = 0; i < n; i++) {
+//            for (int j = 0; j < n; j++) {
+//                new_matrix[j][n - 1 - i] = matrix[i][j];
 //            }
 //        }
+//        for (int i = 0; i < n; i++) {
+//            for (int j = 0; j < n; j++) {
+//                matrix[i][j] = new_matrix[i][j];
+//            }
+//        }
+
+        int length = matrix.length;
+        for (int i = 0; i < length / 2; i++) {
+            for (int j = 0; j < (length + 1) / 2; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[length - j - 1][i];
+                matrix[length - j - 1][i] = matrix[length - i - 1][length - j - 1];
+                matrix[length - i - 1][length - j - 1] = matrix[j][length - i - 1];
+                matrix[j][length - i - 1] = temp;
+            }
+        }
     }
 }

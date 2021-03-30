@@ -21,15 +21,15 @@ public class ReflexUtil {
         // 第三种
         // FruitBean fruitBean = new FruitBean();
         // fruitBean.getClass();
-        FruitBean fruitBean = new FruitBean();
-        try {
-            Method method = fruitBean.getClass().getDeclaredMethod("setColor", String.class);
-            method.invoke(fruitBean,"YELLOW");
-            ShowLogUtil.info(fruitBean.getColor());
-        } catch (Exception e) {
-            ShowLogUtil.info(e.getMessage());
-            e.printStackTrace();
-        }
+//        FruitBean fruitBean = new FruitBean();
+//        try {
+//            Method method = fruitBean.getClass().getDeclaredMethod("setColor", String.class);
+//            method.invoke(fruitBean,"YELLOW");
+//            ShowLogUtil.info(fruitBean.getColor());
+//        } catch (Exception e) {
+//            ShowLogUtil.info(e.getMessage());
+//            e.printStackTrace();
+//        }
 
 //        ShowLogUtil.info(" FruitBean.class.getName()=" + FruitBean.class.getName());
 //        ShowLogUtil.info(" FruitBean.class.getCanonicalName()=" + FruitBean.class.getCanonicalName());
