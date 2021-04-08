@@ -1,6 +1,7 @@
 package com.awesome.message.util;
 
-import com.zjingf.awesomesdk.BaseApplication;
+
+import com.awesome.sdk.BaseApplication;
 
 /**
  * Author: JfangZ
