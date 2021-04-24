@@ -7,4 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <declare-styleable name="noteAttr">
+        <attr name="lineColor" format="color"/>
+        <attr name="lineWidth" format="dimension"/>
+    </declare-styleable>
+
 </resources>
