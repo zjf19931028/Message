@@ -13,7 +13,7 @@ import com.awesome.sdk.util.ToastUtils;
  */
 public abstract class PresenterFragment<Presenter extends BaseContract.Presenter> extends Fragment
         implements BaseContract.View<Presenter> {
-    private Presenter mPresenter;
+    protected Presenter mPresenter;
 
 
     @Override
@@ -42,6 +42,5 @@ public abstract class PresenterFragment<Presenter extends BaseContract.Presenter
     public void setPresenter(Presenter presenter) {
         mPresenter = presenter;
     }
-
 
 }

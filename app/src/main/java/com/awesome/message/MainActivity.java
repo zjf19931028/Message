@@ -4,10 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.awesome.common.app.Activity;
 
-import com.awesome.message.activitys.BaseActivity;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

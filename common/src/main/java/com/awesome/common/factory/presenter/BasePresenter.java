@@ -18,6 +18,7 @@ public class BasePresenter<T extends BaseContract.View>
      */
     protected void setView(T view) {
         mView = view;
+        mView.setPresenter(this);
     }
 
     /**
