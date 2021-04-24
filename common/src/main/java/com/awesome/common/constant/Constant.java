@@ -1,4 +1,4 @@
-package com.awesome.message.constant;
+package com.awesome.common.constant;
 
 import android.Manifest;
 

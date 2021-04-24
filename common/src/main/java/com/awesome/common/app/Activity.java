@@ -1,16 +1,13 @@
-package com.awesome.message.base;
+package com.awesome.common.app;
 
-import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.awesome.message.constant.Constant;
-import com.awesome.message.util.App;
+import com.awesome.common.constant.Constant;
 
 /**
  * Author: JfangZ
@@ -18,11 +15,11 @@ import com.awesome.message.util.App;
  * Date: 2021/2/3 19:48
  * Description: Activity基类
  */
-public class BaseActivity extends AppCompatActivity {
+public class Activity extends AppCompatActivity {
 
     public boolean hasPermission(String... permissions) {
         for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(App.getInstance().getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
         }

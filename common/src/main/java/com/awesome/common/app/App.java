@@ -1,4 +1,5 @@
-package com.awesome.message.base;
+package com.awesome.common.app;
+
 
 import com.awesome.sdk.BaseApplication;
 

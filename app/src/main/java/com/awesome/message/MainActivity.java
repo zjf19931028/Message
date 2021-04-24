@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 
-import com.awesome.message.base.BaseActivity;
+import com.awesome.message.activitys.BaseActivity;
 
 public class MainActivity extends BaseActivity {
 

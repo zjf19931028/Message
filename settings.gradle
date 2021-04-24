@@ -1,2 +1,4 @@
+include ':common'
+include ':factory'
 include ':app'
 rootProject.name = "IM"
